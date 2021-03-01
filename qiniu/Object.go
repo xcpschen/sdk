@@ -18,6 +18,13 @@ func (o *Object) Enable(Bucket, key string) error {
 	d := new(Dntry)
 	d.Bucket = Bucket
 	d.Key = key
+	m, err := o.GetMetadata(d)
+	if err != nil {
+		return err
+	}
+	if !m.IsForbidden() {
+		return nil
+	}
 	return o.setStatus(0, d.EncodedEntryURI())
 }
 
@@ -26,6 +33,13 @@ func (o *Object) Disable(Bucket, key string) error {
 	d := new(Dntry)
 	d.Bucket = Bucket
 	d.Key = key
+	m, err := o.GetMetadata(d)
+	if err != nil {
+		return err
+	}
+	if m.IsForbidden() {
+		return nil
+	}
 	return o.setStatus(1, d.EncodedEntryURI())
 }
 
@@ -119,7 +133,7 @@ func (o *Object) reqTypeForManger(URL, Method string) error {
 	}
 	req.SetAkSK2(o.AccessKey, o.SecretKey)
 	client := new(Qclient)
-	client.Timeout = 5 * time.Second
+	client.Timeout = 60 * time.Second
 
 	if err := client.DoReq(req); err != nil {
 		return err
@@ -128,4 +142,52 @@ func (o *Object) reqTypeForManger(URL, Method string) error {
 		return fmt.Errorf("Code:%d Err:%s", req.Resp.Code, req.Resp.Error)
 	}
 	return nil
+}
+
+// GetMetadata return object Metadata
+func (o *Object) GetMetadata(d *Dntry) (*Metadata, error) {
+	req := &SimpleReq{
+		ReqType:     ReqTypeForManger,
+		Host:        RS_BOX_HOST,
+		URI:         fmt.Sprintf("/stat/%s", d.EncodedEntryURI()),
+		Method:      "GET",
+		ContentType: "application/json",
+	}
+	req.SetAkSK2(o.AccessKey, o.SecretKey)
+	client := new(Qclient)
+	client.Timeout = 60 * time.Second
+
+	if err := client.DoReq(req); err != nil {
+		return nil, err
+	}
+	if req.Resp.Code != 200 {
+		return nil, fmt.Errorf("Code:%d Err:%s", req.Resp.Code, req.Resp.Error)
+	}
+	m := &Metadata{}
+	err := req.Resp.ParseBody(m)
+	if err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+// Metadata object metadata
+type Metadata struct {
+	Fsize         int64  `json:"fsize"`
+	Hash          string `json:"hash"`
+	MimeType      string `json:"mimeType"`
+	MType         uint32 `json:"type"`
+	PutTime       int64  `json:"putTime"`
+	RestoreStatus uint32 `json:"uint32"`
+	Status        uint32 `json:"status"`
+	Md5           string `json:"md5"`
+	Expiration    int64  `json:"expiration"`
+}
+
+// IsForbidden check object is forbidden
+func (m *Metadata) IsForbidden() bool {
+	if m.Status == 1 {
+		return true
+	}
+	return false
 }
