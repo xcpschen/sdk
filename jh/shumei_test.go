@@ -6,33 +6,6 @@ import (
 	"testing"
 )
 
-func TestCheckOnt(t *testing.T) {
-	// sm := jh.NewShuMeiWithConf(jh.ShuMeiConf{
-	// 	AccessKey: "",
-	// 	AppID:     "",
-	// 	EventID:   "",
-	// 	TagType:   "",
-	// 	TokenID:   "",
-	// })
-	// cf := &CFile{
-	// 	Name:     "小清新.jpg",
-	// 	URL:      "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201702%2F09%2F20170209222526_NmCsv.thumb.700_0.jpeg&refer=http%3A%2F%2Fb-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1611991204&t=db0db45d64735ca202ed09dbbc887b3e",
-	// 	FileHash: "3456543",
-	// }
-	// cf2 := &CFile{
-	// 	Name:     "罗瑶.jpg",
-	// 	URL:      "https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=1071334779,862940228&fm=26&gp=0.jpg",
-	// 	FileHash: "qwer22",
-	// }
-	// if err := sm.CheckMore([]jh.JHFile{cf, cf2}); err != nil {
-	// 	t.Fatalf("err:%s", err.Error())
-	// }
-	// if err := sm.CheckOne(cf2); err != nil {
-	// 	t.Fatalf("err:%s", err.Error())
-	// }
-	t.Log("ok")
-}
-
 type CFile struct {
 	Name       string
 	URL        string
