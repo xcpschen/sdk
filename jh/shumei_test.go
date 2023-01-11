@@ -8,11 +8,11 @@ import (
 
 func TestCheckOnt(t *testing.T) {
 	// sm := jh.NewShuMeiWithConf(jh.ShuMeiConf{
-	// 	AccessKey: "TnJ6uoPpUUeuvDMeh4vY",
-	// 	AppID:     "default",
-	// 	EventID:   "default",
-	// 	TagType:   "POLITICS_VIOLENCE_BAN_PORN_MINOR_AD_LOGO",
-	// 	TokenID:   "sXoTexBWs1dfyzt8eTev",
+	// 	AccessKey: "",
+	// 	AppID:     "",
+	// 	EventID:   "",
+	// 	TagType:   "",
+	// 	TokenID:   "",
 	// })
 	// cf := &CFile{
 	// 	Name:     "小清新.jpg",
